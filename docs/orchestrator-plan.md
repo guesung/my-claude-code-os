@@ -166,6 +166,8 @@ my-claude-code-os/
 - (b)는 전역 스킬 `/guesung:advance-code`로 분리한다(**미구현**, `plugin/dependencies.md`에 표기). FF 4원칙 각각에 대해 변경분을 대조하고 "현재 → 제안 → 근거(FF 문서 링크)" 형태로만 낸다. 자동으로 고치지 않는다.
 - 사람 개입은 **시작(설계서)과 끝(최종 검토)** 두 번. (b)의 제안 선택은 최종 검토에 합친다.
 - **검증**: 실제 대상 레포에서 작은 기능 1개를 end-to-end로 돌린다. → 이 시점에 §6의 미결 사항을 확정해야 한다.
+  - ✅ 2026-08-28 — `plugin/skills/implement-loop/SKILL.md` 작성. 다른 cwd에서 `claude --plugin-dir …/plugin -p`로 헤드리스 세션을 띄워 `/os:ledger-check`가 로드·실행되는 것 확인
+  - ⏳ end-to-end 미실행. 대상 레포 + 노션 작업 카드 1개가 필요
 
 ### Step 6 — 되먹임 자동화 (4주차)
 
