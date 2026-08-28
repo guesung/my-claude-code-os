@@ -50,6 +50,7 @@
 
 - **의도 공유** = 설계서 (AI가 초안·지적, 사람이 검토·확정)
 - **실행** = 구현 → 셀프 리뷰 → 리팩토링 → 교차 컨펌 → 셀프 QA
+  - 리팩토링은 두 갈래: 원장·컨벤션 **위반 수정**(필수) + [Frontend Fundamentals](https://github.com/toss/frontend-fundamentals) 기준 **개선 제안**(사람이 선택)
 - **피드백** = 사람의 최종 검토. 여기서 나온 지적이 원장으로 되돌아감 ← **이 화살표가 이 OS의 정체성**
 
 되먹임 화살표가 없으면 이건 그냥 자동화지 OS가 아니다. 루프를 돌수록 판정 기준이 두꺼워지는 것이 핵심이다.
@@ -119,6 +120,7 @@
 
 작업 메모를 md 파일로 만들어 gitignore에 넣으면 **레거시가 되고 나중에 찾기 어렵다.**
 노션을 단일 진실 공급원(SSOT)으로 두고, 작업 카드를 거기로 모은다.
+카드에는 **설계서 · TDL · QA 체크리스트 · 논의 필요 · 루프 로그**를 담고, 오케스트레이터가 이 카드를 읽고 쓴다. → [docs/orchestrator-plan.md](./docs/orchestrator-plan.md) 2절
 
 ### 4.7 문서 유지보수 규칙
 
@@ -131,9 +133,13 @@
 
 이미 갖고 있는 스킬들. 새로 만드는 게 아니라 **하나의 루프로 묶는 것**이 이 강의의 과제.
 
-`/convention-review` · `/full-review` · `/pr` · `/ui-verify` · `/self-qa-checklist` · `/review-feedback-log`
+`/convention-review` · `/full-review` · `/pr` · `/ui-verify` · `/review-feedback-log` · `/spec-build`
+
+전부 전역 플러그인(`~/.claude/skills/guesung/`)에 있다. 이 레포로 복사·symlink 하지 않고 **이름으로 참조**한다. 경계와 근거는 [docs/orchestrator-plan.md](./docs/orchestrator-plan.md) 0절.
 
 ## 5. 4주 로드맵
+
+> 실제 구축 순서·파일 구조는 [docs/orchestrator-plan.md](./docs/orchestrator-plan.md).
 
 각 주차의 성공 기준은 "사람 개입 횟수가 줄었는가".
 
@@ -149,7 +155,7 @@
 
 ## 6. 열린 결정 사항
 
-- [ ] 리뷰 원장의 소스를 어디서 가져올 것인가 (GitHub PR 코멘트 / Notion / 수기)
+- [x] 리뷰 원장의 소스 → **노션 "코드 리뷰 문서화 DB"(적립층) + 레포 `ledger.yaml`(실행층)** 2층 구조. [docs/orchestrator-plan.md](./docs/orchestrator-plan.md) 2절
 - [ ] 실습 대상 코드베이스를 무엇으로 할 것인가 (실제 업무 레포 / 별도 샘플)
 - [ ] 설계서의 형식과 저장 위치 (4.6 SSOT 결정과 함께 정할 것)
 - [ ] PR 분할 기준의 구체적 임계값 — 파일 수 몇 개? 라인 수를 함께 볼 것인가?
