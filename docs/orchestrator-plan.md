@@ -16,7 +16,7 @@
 
 ```
 ~/.claude/skills/guesung/        (전역 플러그인, ~/.claude git 레포로 버전 관리됨)
-  범용 스킬 — spec-build · full-review · ui-verify · pr · review-feedback-log · advance-code(미구현)
+  범용 스킬 — spec-build · full-review · ui-verify · pr · review-feedback-log · advance-code
         ▲ 이름으로 호출 (/guesung:xxx)
         │
 my-claude-code-os/               (이 레포)
@@ -182,7 +182,7 @@ my-claude-code-os/
 
 - 회차 상한 3은 ②~⑤ 전체를 한 회차로 센다. **상한이지 고정이 아니다** — 종료 조건을 만족하면 1회차에도 끝난다.
 - ④(a)와 ④(b)는 성격이 다르다. (a)는 원장·컨벤션 **위반**이라 반드시 고친다. (b)는 [Frontend Fundamentals](https://github.com/toss/frontend-fundamentals)(가독성·예측 가능성·응집도·결합도) 기준으로 **더 나은 코드가 될 수 있는지**를 제안하는 것이라, 적용 여부는 사람이 고른다. 둘을 섞으면 "위반"과 "취향"이 구분되지 않아 원장이 오염된다.
-- (b)는 전역 스킬 `/guesung:advance-code`로 분리한다(**미구현**, `plugin/dependencies.md`에 표기). FF 4원칙 각각에 대해 변경분을 대조하고 "현재 → 제안 → 근거(FF 문서 링크)" 형태로만 낸다. 자동으로 고치지 않는다.
+- (b)는 전역 스킬 `/guesung:advance-code`로 분리한다. 토스 공식 FF 플러그인의 스킬 4개 본문을 `references/`로 가져와 직접 관리하고(플러그인 의존 없음), 전역 컨벤션·원장과 충돌하는 FF 패턴(매직 넘버 상수화·도메인 폴더 이동 등)은 명시적 필터 표로 걸러낸다. FF 4원칙 각각에 대해 변경분을 대조하고 "현재 → 제안 → 근거(FF 문서 링크)" 형태로만 낸다. 자동으로 고치지 않는다.
 - 사람 개입은 **시작(설계서)과 끝(최종 검토)** 두 번. (b)의 제안 선택은 최종 검토에 합친다.
 - **검증**: 실제 대상 레포에서 작은 기능 1개를 end-to-end로 돌린다. → 이 시점에 §6의 미결 사항을 확정해야 한다.
   - ✅ 2026-08-28 — `plugin/skills/implement-loop/SKILL.md` 작성. 다른 cwd에서 `claude --plugin-dir …/plugin -p`로 헤드리스 세션을 띄워 `/os:ledger-check`가 로드·실행되는 것 확인

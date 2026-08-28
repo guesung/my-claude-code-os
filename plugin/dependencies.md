@@ -8,7 +8,7 @@
 |---|---|---|
 | `/guesung:spec-build` | ① 구현 | 있음 |
 | `/guesung:convention-review` | ④ 리팩토링 (a) 위반 수정 | 있음 |
-| `/guesung:advance-code` | ④ 리팩토링 (b) [Frontend Fundamentals](https://github.com/toss/frontend-fundamentals) 기준 개선 제안 | **미구현** |
+| `/guesung:advance-code` | ④ 리팩토링 (b) [Frontend Fundamentals](https://github.com/toss/frontend-fundamentals) 기준 개선 제안. FF 플러그인 스킬 본문을 `references/`로 가져와 직접 관리 | 있음 |
 | `/guesung:ui-verify` | ⑥ 셀프 QA — `/os:self-qa`가 자동 항목 판정에 호출 | 있음 |
 | `/guesung:pr` | ⑦ Draft PR | 있음 |
 | `/guesung:review-feedback-log` | 되먹임 — 최종 리뷰 지적을 노션 원장(적립층)에 적립 | 있음 |
