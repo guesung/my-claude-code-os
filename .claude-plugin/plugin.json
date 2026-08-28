@@ -7,5 +7,9 @@
     "name": "guesung",
     "email": "gueit214@naver.com"
   },
-  "skills": "./skills"
+  "skills": "./skills",
+  "agents": [
+    "./agents/ledger-reviewer.md",
+    "./agents/rejector.md"
+  ]
 }
