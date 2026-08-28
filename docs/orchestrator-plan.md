@@ -21,34 +21,36 @@
         │
 my-claude-code-os/               (이 레포)
   OS 고유 부품 — 원장 · 검사기 · 리뷰어/반려자 에이전트 · 오케스트레이터
-  docs/dependencies.md — 필요한 전역 스킬 목록. 검사기가 시작 시 존재 확인
+  plugin/dependencies.md — 필요한 전역 스킬 목록. 검사기가 시작 시 존재 확인
 ```
 
 OS.md 4.8에 적힌 `/self-qa-checklist`는 전역에 존재하지 않는다. 셀프 QA는 `/guesung:ui-verify`로 대체한다.
 
 ## 1. 목표 파일 구조
 
-이 레포는 **그 자체가 플러그인**이다 (`.claude-plugin/plugin.json`, 이름 `os`). 다른 레포에서 `claude --plugin-dir <이 레포 경로>`로 띄우면 `/os:ledger-check` 등으로 로드된다. `.claude/skills/`는 이 레포 자체를 관리하는 스킬(gh-commit 등) 전용이고, OS 부품은 루트 `skills/`·`agents/`에 둔다.
+OS 부품은 전부 `plugin/` 아래에 모은다. 이 폴더가 **플러그인 루트**이며 자기완결적이다 — 다른 레포에서 `claude --plugin-dir <이 레포>/plugin`으로 띄우면 `/os:ledger-check` 등으로 로드된다. `.claude/skills/`는 이 레포 자체를 관리하는 스킬(gh-commit 등) 전용이라 플러그인에 넣지 않는다.
 
 ```
 my-claude-code-os/
-├── .claude-plugin/plugin.json      # 플러그인 매니페스트. name: os
-├── ledger/
-│   ├── ledger.yaml                 # 실행 원장 v0
-│   └── fixtures/
-│       └── violations.diff         # 검사기·리뷰어 검증용. 원장 항목을 일부러 위반한 diff
-├── skills/
-│   ├── ledger-check/               # 검사기 v0
-│   │   ├── SKILL.md
-│   │   └── scripts/ledger_check.py
-│   └── implement-loop/             # 오케스트레이터 (3주차)
-│       └── SKILL.md
-├── agents/
-│   ├── ledger-reviewer.md          # 리뷰어: 원장 + 컨벤션 기준으로만 판정
-│   └── rejector.md                 # 교차 컨펌: diff만 보고 "반려 근거"를 찾는다
-└── docs/
-    ├── dependencies.md             # 전역 스킬 의존 목록
-    └── orchestrator-plan.md        # 이 문서
+├── plugin/                         # 플러그인 루트. name: os
+│   ├── .claude-plugin/plugin.json
+│   ├── dependencies.md             # 전역 스킬 의존 목록. 검사기가 읽는다
+│   ├── ledger/
+│   │   ├── ledger.yaml             # 실행 원장 v0
+│   │   └── fixtures/
+│   │       └── violations.diff     # 검사기·리뷰어 검증용. 원장 항목을 일부러 위반한 diff
+│   ├── skills/
+│   │   ├── ledger-check/           # 검사기 v0
+│   │   │   ├── SKILL.md
+│   │   │   └── scripts/ledger_check.py
+│   │   └── implement-loop/         # 오케스트레이터 (3주차)
+│   │       └── SKILL.md
+│   └── agents/
+│       ├── ledger-reviewer.md      # 리뷰어: 원장 + 컨벤션 기준으로만 판정
+│       └── rejector.md             # 교차 컨펌: diff만 보고 "반려 근거"를 찾는다
+├── .claude/skills/                 # 레포 관리용 (gh-commit, skill-stat)
+├── docs/orchestrator-plan.md       # 이 문서
+└── OS.md
 ```
 
 원장 파싱은 pyyaml 없이 스크립트 내장 최소 파서로 한다(외부 의존 0). 원장은 "리스트 → 2단 매핑 → 스칼라 또는 `>-` 블록" 서브셋만 쓴다.
@@ -116,7 +118,7 @@ my-claude-code-os/
 ### Step 2 — 검사기 v0 (2주차)
 
 - `ledger_check.py`: `ledger.yaml`을 읽고 `git diff <base>...HEAD`(또는 인자로 받은 diff 파일)에 grep 항목을 실행. 항목별 `PASS/FAIL + 파일:라인` 출력, `--json` 옵션.
-- 시작 시 `docs/dependencies.md`의 전역 스킬 존재 확인. 없으면 실행 전에 멈춘다.
+- 시작 시 `plugin/dependencies.md`의 전역 스킬 존재 확인. 없으면 실행 전에 멈춘다.
 - `SKILL.md`: "원장 검사", "ledger check" 트리거. 결과를 표로 보여주기만 하고 고치지 않는다.
 - **검증**: fixture로 돌려 grep 항목 전부 FAIL, 깨끗한 diff로 돌려 전부 PASS. ✅ 2026-08-28 — fixture 7 FAIL(각 1건) / 빈 diff 7 SKIP / JSDoc 면제 케이스 통과 / `claude plugin validate` 통과
 
@@ -161,7 +163,7 @@ my-claude-code-os/
 
 - 회차 상한 3은 ②~⑤ 전체를 한 회차로 센다. **상한이지 고정이 아니다** — 종료 조건을 만족하면 1회차에도 끝난다.
 - ④(a)와 ④(b)는 성격이 다르다. (a)는 원장·컨벤션 **위반**이라 반드시 고친다. (b)는 [Frontend Fundamentals](https://github.com/toss/frontend-fundamentals)(가독성·예측 가능성·응집도·결합도) 기준으로 **더 나은 코드가 될 수 있는지**를 제안하는 것이라, 적용 여부는 사람이 고른다. 둘을 섞으면 "위반"과 "취향"이 구분되지 않아 원장이 오염된다.
-- (b)는 전역 스킬 `/guesung:advance-code`로 분리한다(**미구현**, `docs/dependencies.md`에 표기). FF 4원칙 각각에 대해 변경분을 대조하고 "현재 → 제안 → 근거(FF 문서 링크)" 형태로만 낸다. 자동으로 고치지 않는다.
+- (b)는 전역 스킬 `/guesung:advance-code`로 분리한다(**미구현**, `plugin/dependencies.md`에 표기). FF 4원칙 각각에 대해 변경분을 대조하고 "현재 → 제안 → 근거(FF 문서 링크)" 형태로만 낸다. 자동으로 고치지 않는다.
 - 사람 개입은 **시작(설계서)과 끝(최종 검토)** 두 번. (b)의 제안 선택은 최종 검토에 합친다.
 - **검증**: 실제 대상 레포에서 작은 기능 1개를 end-to-end로 돌린다. → 이 시점에 §6의 미결 사항을 확정해야 한다.
 
@@ -185,7 +187,7 @@ CLAUDE.md 2번(협업 학습)에 맞춰, 단계마다 "왜 이렇게 나눴는�
 ## 6. 미결 — Step 5 전에 확정할 것
 
 - [ ] **실습 대상 코드베이스.** 노션 원장의 PR 링크는 전부 `CashwalkHomepageAstroWeb`. 회사 레포에서 직접 돌릴지, 별도 샘플을 둘지.
-- [x] **OS를 다른 레포에서 실행하는 방식** → 플러그인화. `claude --plugin-dir <이 레포>`. 정식 설치(로컬 마켓플레이스)는 Step 5에서.
+- [x] **OS를 다른 레포에서 실행하는 방식** → 플러그인화. `claude --plugin-dir <이 레포>/plugin`. 정식 설치(로컬 마켓플레이스)는 Step 5에서.
 - [ ] PR 분할 임계값 (OS.md 6절 그대로 미결).
 
 ## 7. 브랜치 전략

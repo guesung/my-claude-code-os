@@ -21,7 +21,7 @@ from pathlib import Path
 
 PLUGIN_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_LEDGER = PLUGIN_ROOT / "ledger" / "ledger.yaml"
-DEFAULT_DEPENDENCIES = PLUGIN_ROOT / "docs" / "dependencies.md"
+DEFAULT_DEPENDENCIES = PLUGIN_ROOT / "dependencies.md"
 GLOBAL_SKILL_ROOT = Path.home() / ".claude" / "skills" / "guesung"
 
 EXIT_OK = 0

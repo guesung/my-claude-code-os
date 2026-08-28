@@ -1,6 +1,6 @@
 # 전역 스킬 의존 목록
 
-이 OS는 범용 스킬을 **이름으로 참조**한다. 전역 플러그인 `~/.claude/skills/guesung/`이 SSOT이며, 이 레포로 복사·symlink 하지 않는다. ([orchestrator-plan.md](./orchestrator-plan.md) 0절)
+이 OS는 범용 스킬을 **이름으로 참조**한다. 전역 플러그인 `~/.claude/skills/guesung/`이 SSOT이며, 이 레포로 복사·symlink 하지 않는다. ([orchestrator-plan.md](../docs/orchestrator-plan.md) 0절)
 
 검사기(`/ledger-check`)는 시작 시 아래 목록의 존재를 확인하고, 없으면 실행 전에 멈춘다.
 
