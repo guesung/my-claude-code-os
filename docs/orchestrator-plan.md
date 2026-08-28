@@ -28,26 +28,30 @@ OS.md 4.8에 적힌 `/self-qa-checklist`는 전역에 존재하지 않는다. �
 
 ## 1. 목표 파일 구조
 
+이 레포는 **그 자체가 플러그인**이다 (`.claude-plugin/plugin.json`, 이름 `os`). 다른 레포에서 `claude --plugin-dir <이 레포 경로>`로 띄우면 `/os:ledger-check` 등으로 로드된다. `.claude/skills/`는 이 레포 자체를 관리하는 스킬(gh-commit 등) 전용이고, OS 부품은 루트 `skills/`·`agents/`에 둔다.
+
 ```
 my-claude-code-os/
+├── .claude-plugin/plugin.json      # 플러그인 매니페스트. name: os
 ├── ledger/
 │   ├── ledger.yaml                 # 실행 원장 v0
 │   └── fixtures/
 │       └── violations.diff         # 검사기·리뷰어 검증용. 원장 항목을 일부러 위반한 diff
-├── .claude/
-│   ├── agents/
-│   │   ├── ledger-reviewer.md      # 리뷰어: 원장 + 컨벤션 기준으로만 판정
-│   │   └── rejector.md             # 교차 컨펌: diff만 보고 "반려 근거"를 찾는다
-│   └── skills/
-│       ├── ledger-check/           # 검사기 v0
-│       │   ├── SKILL.md
-│       │   └── scripts/ledger_check.py
-│       └── implement-loop/         # 오케스트레이터 (3주차)
-│           └── SKILL.md
+├── skills/
+│   ├── ledger-check/               # 검사기 v0
+│   │   ├── SKILL.md
+│   │   └── scripts/ledger_check.py
+│   └── implement-loop/             # 오케스트레이터 (3주차)
+│       └── SKILL.md
+├── agents/
+│   ├── ledger-reviewer.md          # 리뷰어: 원장 + 컨벤션 기준으로만 판정
+│   └── rejector.md                 # 교차 컨펌: diff만 보고 "반려 근거"를 찾는다
 └── docs/
     ├── dependencies.md             # 전역 스킬 의존 목록
     └── orchestrator-plan.md        # 이 문서
 ```
+
+원장 파싱은 pyyaml 없이 스크립트 내장 최소 파서로 한다(외부 의존 0). 원장은 "리스트 → 2단 매핑 → 스칼라 또는 `>-` 블록" 서브셋만 쓴다.
 
 ## 2. 작업 카드 (노션, SSOT)
 
@@ -114,7 +118,7 @@ my-claude-code-os/
 - `ledger_check.py`: `ledger.yaml`을 읽고 `git diff <base>...HEAD`(또는 인자로 받은 diff 파일)에 grep 항목을 실행. 항목별 `PASS/FAIL + 파일:라인` 출력, `--json` 옵션.
 - 시작 시 `docs/dependencies.md`의 전역 스킬 존재 확인. 없으면 실행 전에 멈춘다.
 - `SKILL.md`: "원장 검사", "ledger check" 트리거. 결과를 표로 보여주기만 하고 고치지 않는다.
-- **검증**: fixture로 돌려 grep 항목 전부 FAIL, 깨끗한 diff로 돌려 전부 PASS.
+- **검증**: fixture로 돌려 grep 항목 전부 FAIL, 깨끗한 diff로 돌려 전부 PASS. ✅ 2026-08-28 — fixture 7 FAIL(각 1건) / 빈 diff 7 SKIP / JSDoc 면제 케이스 통과 / `claude plugin validate` 통과
 
 ### Step 3 — 리뷰어 에이전트 (2주차)
 
@@ -180,7 +184,7 @@ CLAUDE.md 2번(협업 학습)에 맞춰, 단계마다 "왜 이렇게 나눴는�
 ## 6. 미결 — Step 5 전에 확정할 것
 
 - [ ] **실습 대상 코드베이스.** 노션 원장의 PR 링크는 전부 `CashwalkHomepageAstroWeb`. 회사 레포에서 직접 돌릴지, 별도 샘플을 둘지.
-- [ ] **OS를 다른 레포에서 실행하는 방식.** `.claude/skills`는 이 레포 안에서만 로드된다. 후보: ① 이 레포를 로컬 플러그인으로 만들어 `~/.claude`에 설치 ② `~/.claude/skills/os → 이 레포` symlink(로컬 전용). 플러그인화가 정석이나 부품 단계에선 불필요.
+- [x] **OS를 다른 레포에서 실행하는 방식** → 플러그인화. `claude --plugin-dir <이 레포>`. 정식 설치(로컬 마켓플레이스)는 Step 5에서.
 - [ ] PR 분할 임계값 (OS.md 6절 그대로 미결).
 
 ## 7. 브랜치 전략
