@@ -45,6 +45,7 @@ my-claude-code-os/
 │   │   ├── ledger-check/           # 검사기 v0
 │   │   │   ├── SKILL.md
 │   │   │   └── scripts/ledger_check.py
+│   │   ├── ledger-promote/         # 노션 → 원장 승격, 폐기, 재발 카운트 (4주차)
 │   │   └── implement-loop/         # 오케스트레이터 (3주차)
 │   │       └── SKILL.md
 │   └── agents/
@@ -192,8 +193,10 @@ my-claude-code-os/
 
 ### Step 6 — 되먹임 자동화 (4주차)
 
-- 노션 → `ledger.yaml` 승격 스킬. 노션 항목에 검증법을 붙여 실행 원장에 추가.
-- `재발` 카운트 갱신. 재발률 리포트.
+- `/os:ledger-promote` — 노션 → `ledger.yaml` 승격. LLM이 후보 대조·grep/judgment 분류·초안, 사람 승인, 스크립트가 쓰기·검증. **grep 항목은 fixture 위반 줄 없이는 거부**, 검사기로 FAIL 증가를 확인하고 실패 시 되돌림. 폐기는 `ledger/retired.yaml`로. `--recur <id>`로 재발 +1.
+  - ✅ 2026-08-28 — 스크립트 시나리오 검증: add(grep+judgment) FAIL 7→8 / recur / 중복 출처 거부 / fixture 없는 grep 거부 / pattern 미매치 시 되돌림 / retire 후 FAIL 7 복귀
+  - ⏳ 노션 실데이터로 승격 1회 미실행
+- 재발률 리포트 — 미구현. `재발` 필드를 집계해 주차별 숫자로.
 
 ## 5. 각 단계에서 배우는 것
 
