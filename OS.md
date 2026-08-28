@@ -120,7 +120,7 @@
 
 작업 메모를 md 파일로 만들어 gitignore에 넣으면 **레거시가 되고 나중에 찾기 어렵다.**
 노션을 단일 진실 공급원(SSOT)으로 두고, 작업 카드를 거기로 모은다.
-카드에는 **설계서 · TDL · QA 체크리스트 · 논의 필요 · 루프 로그**를 담고, 오케스트레이터가 이 카드를 읽고 쓴다. → [docs/orchestrator-plan.md](./docs/orchestrator-plan.md) 2절
+팀 작업 카드(`1파트 작업리스트`)는 팀이 보는 상태판이라 **AI는 읽기만** 하고, 상황 공유는 개인 `업무 로그` DB 페이지에 **설계서 · TDL · QA 체크리스트 · 논의 필요 · 루프 로그**로 쌓는다. 둘은 슬랙 스레드 URL로 묶인다. → [docs/orchestrator-plan.md](./docs/orchestrator-plan.md) 2절
 
 ### 4.7 문서 유지보수 규칙
 
