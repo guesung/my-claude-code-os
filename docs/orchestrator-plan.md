@@ -41,6 +41,7 @@ my-claude-code-os/
 │   │       └── violations.diff     # 검사기·리뷰어 검증용. 원장 항목을 일부러 위반한 diff
 │   ├── skills/
 │   │   ├── work-card/              # 슬랙 URL → 팀 카드 찾기 → 개인 페이지 생성 → 설계 초안
+│   │   ├── self-qa/                # QA 명세 → 노션 QA 항목 DB → 자동 판정(ui-verify) / 수동 재현 방법
 │   │   ├── ledger-check/           # 검사기 v0
 │   │   │   ├── SKILL.md
 │   │   │   └── scripts/ledger_check.py
@@ -70,7 +71,8 @@ my-claude-code-os/
 |---|---|---|---|
 | 팀 카드 `1파트 작업리스트` | cashwalkteam | `claude.ai Notion` | 상태·담당자·PR — **팀이 보는 것. AI는 읽기만** |
 | 스레드 모음 `1파트 작업 스레드 모음` | cashwalkteam | `claude.ai Notion` | 슬랙 URL → 팀 카드 찾기 |
-| 개인 페이지 `업무 로그` | guesung | `notion-home` | 설계서·TDL·QA·논의·루프 로그 — **상황 공유 전부 여기** |
+| 개인 페이지 `업무 로그` | guesung | `notion-home` | 설계서·TDL·논의·루프 로그 — **상황 공유 전부 여기** |
+| QA 항목 DB (📜 문서 › QA 체크리스트) | guesung | `notion-home` | 모든 작업의 QA 항목이 행으로. `작업` relation으로 업무 로그와 연결 |
 
 개인 DB는 `claude.ai Notion` MCP로는 404. 두 MCP를 구분해 써야 한다.
 
@@ -80,7 +82,7 @@ my-claude-code-os/
 |---|---|---|
 | `## 설계서` | `/os:work-card`가 슬랙 스레드에서 초안 → 사람 확정 | ① 구현 |
 | `## TDL` | implement-loop가 설계서에서 뽑고 회차마다 체크. 속성 `TODO`/`완료 작업`에 미러링 | ① 구현, 사람의 진행 파악 |
-| `## QA 체크리스트` | implement-loop가 설계서에서 뽑음. 자동/수동 구분 | ⑥ 셀프 QA. 수동 항목은 재현 방법과 함께 사람에게 |
+| `## QA 체크리스트` | `/os:self-qa`가 설계서에서 뽑아 **노션 "QA 항목" DB**(📜 문서 › QA 체크리스트 페이지 안 인라인 DB)에 행으로 쌓음. 페이지엔 링크·요약만 | ⑥ 셀프 QA. 자동은 ui-verify로 판정, 수동은 재현 방법과 함께 사람에게 |
 | `## 논의 필요` | work-card의 "막힐 지점" + 루프 중 가정·WARN·FF 제안 | 사람. **비어 있어야 루프가 시작된다** |
 | `## 루프 로그` | 회차별 검사기·리뷰어·반려자 판정 요약 | 사람의 최종 검토, 4주차 재발률 집계 |
 
@@ -171,7 +173,7 @@ my-claude-code-os/
 ④ 리팩토링      (a) FAIL 항목 수정 — 필수 │  회차 ≤ 3. 초과 시 멈추고 사람에게
                (b) FF 기준 개선 제안 — 선택 │  조기 종료: 전부 PASS + 반려 없음 + (b) 제안 없음
 ⑤ 반려자        rejector               ─┘  반려 근거 있음 → ④로 (회차 공유)
-⑥ 셀프 QA       /guesung:ui-verify     카드의 QA 체크리스트 기준. 자동 불가 항목은 재현 방법을 남긴다
+⑥ 셀프 QA       /os:self-qa --run      자동은 ui-verify, 수동은 재현 방법. 결과는 QA 항목 DB에
 ⑦ Draft PR      /guesung:pr
    │
    ▼
@@ -184,6 +186,7 @@ my-claude-code-os/
 - 사람 개입은 **시작(설계서)과 끝(최종 검토)** 두 번. (b)의 제안 선택은 최종 검토에 합친다.
 - **검증**: 실제 대상 레포에서 작은 기능 1개를 end-to-end로 돌린다. → 이 시점에 §6의 미결 사항을 확정해야 한다.
   - ✅ 2026-08-28 — `plugin/skills/implement-loop/SKILL.md` 작성. 다른 cwd에서 `claude --plugin-dir …/plugin -p`로 헤드리스 세션을 띄워 `/os:ledger-check`가 로드·실행되는 것 확인
+  - ✅ 2026-08-28 — `/os:self-qa` 추가. OS.md 4.4의 "QA 명세서 작성 → 자동 QA → 수동 안내"를 맡는 부품. 노션 QA 항목 DB 생성(12속성)
   - ✅ 2026-08-28 — `/os:work-card` 추가. 입력을 슬랙 URL | 개인 페이지 URL | 로컬 설계서로 확장. 팀 카드 읽기 전용, 상황 공유는 개인 `업무 로그` 페이지로
   - ⏳ end-to-end 미실행. 슬랙 스레드 1개로 work-card → 설계서 확정 → implement-loop 순서로 돌려봐야 한다
 
