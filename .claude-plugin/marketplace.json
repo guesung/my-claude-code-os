@@ -1,0 +1,26 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "my-claude-code-os",
+  "owner": {
+    "name": "guesung",
+    "email": "gueit214@naver.com"
+  },
+  "metadata": {
+    "description": "나만의 클로드 코드 OS 실습 레포. 리뷰 지식을 먹고 자라는 구현 OS를 플러그인으로 배포한다."
+  },
+  "plugins": [
+    {
+      "name": "os",
+      "source": "./plugin",
+      "description": "리뷰 지식을 먹고 자라는 구현 OS — 원장·검사기·리뷰어/반려자 에이전트·오케스트레이터",
+      "version": "0.1.0",
+      "author": {
+        "name": "guesung",
+        "email": "gueit214@naver.com"
+      },
+      "category": "productivity",
+      "homepage": "https://github.com/guesung/my-claude-code-os",
+      "tags": ["orchestrator", "code-review", "ledger", "self-qa"]
+    }
+  ]
+}
