@@ -13,7 +13,7 @@ argument-hint: '<개인 업무 로그 페이지 URL | 설계서 파일 경로> [
 
 | 식별자 | 값 |
 |---|---|
-| 페이지 "QA 체크리스트" (📜 문서 DB 안) | `3ca89de0-2fde-816b-8352-cfbb0fdc28c2` |
+| 페이지 "QA 항목" (인라인 DB가 놓인 페이지) | `3cb89de0-2fde-8048-bcd2-cc834d7e03f6` |
 | 인라인 DB "QA 항목" database | `67c9937c-44f1-4d43-b306-d6fd66031cac` |
 | 인라인 DB "QA 항목" data source | `bf2d9b85-98bb-4d4f-9ec4-d6a2018ff02f` |
 | `작업` relation 대상 = 업무 로그 data source | `8412989c-11e3-4685-8af9-35299fc6c097` |
