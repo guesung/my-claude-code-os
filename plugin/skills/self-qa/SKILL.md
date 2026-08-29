@@ -16,7 +16,7 @@ argument-hint: '<개인 업무 로그 페이지 URL | 설계서 파일 경로> [
 | 페이지 "QA 체크리스트" (📜 문서 DB 안) | `3ca89de0-2fde-816b-8352-cfbb0fdc28c2` |
 | 인라인 DB "QA 항목" database | `67c9937c-44f1-4d43-b306-d6fd66031cac` |
 | 인라인 DB "QA 항목" data source | `bf2d9b85-98bb-4d4f-9ec4-d6a2018ff02f` |
-| `작업` relation 대상 = 업무 로그 data source | `35e89de0-2fde-8010-ae3b-000b081dad99` |
+| `작업` relation 대상 = 업무 로그 data source | `8412989c-11e3-4685-8af9-35299fc6c097` |
 
 행 하나 = QA 항목 하나. 모든 작업의 항목이 이 DB 한 곳에 쌓이고 `작업` relation으로 구분된다. 작업별 페이지를 따로 만들지 않는다 — 4주차에 "수동 비율"·"FAIL 잦은 유형"을 세려면 한 곳에 있어야 한다.
 
