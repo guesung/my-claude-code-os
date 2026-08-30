@@ -22,5 +22,5 @@
 | MCP | 쓰이는 곳 | 용도 |
 |---|---|---|
 | `claude.ai Notion` | `/os:work-card`, `/os:ledger-promote` | 팀 작업리스트·스레드 모음 읽기, 코드 리뷰 문서화 DB 읽기 (cashwalkteam) |
-| `notion-home` | `/os:work-card`, `/os:implement-loop`, `/os:self-qa` | 개인 업무 로그 페이지·QA 항목 DB 읽기·쓰기 (guesung) |
+| `notion-home` | `/os:work-card`, `/os:implement-loop`, `/os:self-qa`, `/os:problem-log` | 개인 업무 로그 페이지·QA 항목 DB·문제 해결 일지DB 읽기·쓰기 (guesung) |
 | `slack` 플러그인 | `/os:work-card` | 스레드 읽기 → 설계서 초안 |
