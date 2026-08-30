@@ -203,7 +203,10 @@ my-claude-code-os/
   - ✅ 2026-08-28 — `plugin/skills/implement-loop/SKILL.md` 작성. 다른 cwd에서 `claude --plugin-dir …/plugin -p`로 헤드리스 세션을 띄워 `/os:ledger-check`가 로드·실행되는 것 확인
   - ✅ 2026-08-28 — `/os:self-qa` 추가. OS.md 4.5의 "QA 명세서 작성 → 자동 QA → 수동 안내"를 맡는 부품. 노션 QA 항목 DB 생성(12속성)
   - ✅ 2026-08-28 — `/os:work-card` 추가. 입력을 슬랙 URL | 개인 페이지 URL | 로컬 설계서로 확장. 팀 카드 읽기 전용, 상황 공유는 개인 `업무 로그` 페이지로
-  - ⏳ end-to-end 미실행. 슬랙 스레드 1개로 work-card → 설계서 확정 → implement-loop 순서로 돌려봐야 한다
+  - ✅ 2026-08-30 — ⑦ 테섭 배포(`/guesung:md`) 단계 추가, ⑧ PR을 그 뒤로. 수동 QA를 제목까지 펴서 보고
+  - ✅ 2026-08-30 — 프로젝트별 루프 범위 반영. §0-4에서 `scope`를 판정해 `out`이면 ②~⑤를 건너뛴다
+  - ✅ 2026-08-30 — §0-3 시작 게이트에 `/os:design` 확정 도장 확인 추가
+  - ⏳ end-to-end 미실행. 슬랙 스레드 1개로 work-card → design → implement-loop 순서로 돌려봐야 한다
 
 ### 프로젝트별 루프 범위 — cashwalk 안/밖
 
