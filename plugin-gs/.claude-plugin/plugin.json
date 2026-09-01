@@ -7,11 +7,5 @@
     "name": "guesung",
     "email": "gueit214@naver.com"
   },
-  "skills": "./skills",
-  "agents": [
-    "./agents/planner.md",
-    "./agents/designer.md",
-    "./agents/frontend-dev.md",
-    "./agents/backend-dev.md"
-  ]
+  "skills": "./skills"
 }
