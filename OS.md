@@ -150,9 +150,11 @@ QA 항목은 노션 "QA 항목" DB에 작업별로 쌓인다(`/os:self-qa`). 자
 
 이미 갖고 있는 스킬들. 새로 만드는 게 아니라 **하나의 루프로 묶는 것**이 이 강의의 과제.
 
-`/convention-review` · `/full-review` · `/pr` · `/ui-verify` · `/review-feedback-log` · `/spec-build`
+`/spec-build`(① 구현) · `/ui-verify`(⑥ QA) · `/md`(⑦ 테섭 배포) · `/pr`(⑧ Draft PR) · `/convention-review`(⑧ 직후, `/pr`이 호출) · `/review-feedback-log`(되먹임)
 
-전부 전역 플러그인(`~/.claude/skills/guesung/`)에 있다. 이 레포로 복사·symlink 하지 않고 **이름으로 참조**한다. 경계와 근거는 [docs/orchestrator-plan.md](./docs/orchestrator-plan.md) 0절.
+전부 전역 플러그인(`~/.claude/skills/guesung/`)에 있다. 이 레포로 복사·symlink 하지 않고 **이름으로 참조**한다. 어느 스킬이 어느 단계에 붙는지의 SSOT는 [plugin/dependencies.md](./plugin/dependencies.md)이고, 경계와 근거는 [docs/orchestrator-plan.md](./docs/orchestrator-plan.md) 0절.
+
+**`/full-review`는 후보였다가 뺐다.** ③ 리뷰어와 ⑤ 반려자는 각각 "원장·컨벤션에 있는 것만" · "반려 근거만" 보도록 범위를 좁혀놨다. 그래야 같은 코드에 대해 같은 판정이 나오고 회차가 수렴한다. 범위를 좁히지 않는 범용 리뷰를 그 안에 섞으면 회차마다 다른 이유로 FAIL이 나서 상한 3회를 그냥 태운다. 최종 검토 때 사람이 따로 부르는 건 얼마든지 좋다 — 다만 **루프 안에는 두지 않는다.**
 
 ## 5. 4주 로드맵
 
