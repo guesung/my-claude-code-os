@@ -18,22 +18,11 @@ argument-hint: '<슬랙 스레드 URL>'
 /os:implement-loop  구현 → 검사 → 리뷰 → QA → 테섭 배포 → PR
 ```
 
-## 두 개의 노션, 두 개의 MCP
+## 노션 접근
 
-| 대상 | 워크스페이스 | 쓰는 MCP | 접근 |
-|---|---|---|---|
-| 팀 작업 카드 · 스레드 모음 | cashwalkteam | `claude.ai Notion` (`notion-fetch`, `notion-query-data-sources`) | **읽기 전용** |
-| 개인 업무 로그 | guesung | `notion-home` (`API-post-page`, `API-patch-page`, `API-query-data-source`, `API-patch-block-children`) | 읽기·쓰기 |
+**시작 전에 [notion-databases.md](../../notion-databases.md)를 읽는다.** 이 스킬이 쓰는 네 식별자 — 팀 작업리스트 · 팀 스레드 모음 · 담당자 "나" · 개인 업무 로그 data source — 와 속성 규칙이 전부 거기 있다.
 
-개인 DB는 `claude.ai Notion`으로 접근하면 404가 난다. 반대로 팀 DB는 `notion-home`에 없다. 섞어 쓰지 않는다.
-
-| 식별자 | 값 |
-|---|---|
-| 팀 작업리스트 data source | `collection://d7229a7c-7fd6-4547-b321-b5370660d0f1` |
-| 팀 스레드 모음 data source | `collection://1f2a054b-7d82-80bf-af60-000b25972a74` |
-| 팀 작업리스트에서 "나" | `user://341d872b-594c-81a0-b4c2-0002f0e8c323` |
-| 개인 업무 로그 database | `5f408e05-0015-4532-bcd8-bd36439bec5a` |
-| 개인 업무 로그 data source | `8412989c-11e3-4685-8af9-35299fc6c097` |
+이 스킬은 **두 노션을 모두** 만진다. 팀은 `claude.ai Notion`으로 읽기만, 개인은 `notion-home`으로 읽고 쓴다. 섞어 쓰면 404다.
 
 ## ① 팀 카드 찾기
 
@@ -42,15 +31,16 @@ argument-hint: '<슬랙 스레드 URL>'
 1. **스레드 모음에서 찾기.** URL 속성 이름이 `URLhttps://…`로 시작하는 기형 이름이라 SQL에서 그대로 인용한다.
    ```sql
    SELECT url, "", "작업카드", "태그"
-   FROM "collection://1f2a054b-7d82-80bf-af60-000b25972a74"
-   WHERE "URLhttps://w1748334471-0ys520938.slack.com/archives/C08TWHCQF2T/p1778133587298739" LIKE '%p<메시지ID>%'
+   FROM "<팀 스레드 모음 data source>"
+   WHERE "<URL 속성 이름>" LIKE '%p<메시지ID>%'
    ```
+   data source URI와 **기형인 URL 속성 이름 전체**는 [notion-databases.md](../../notion-databases.md#팀-스레드-모음)에 있다. 이름을 줄여 쓰면 조회가 실패한다.
    `작업카드`가 비어 있지 않으면 그 페이지가 팀 카드다. `notion-fetch`로 `할일`·`상태`·`작업 ID`·`QA 체크리스트`·`메모`를 읽는다.
 2. **없으면 작업리스트에서 대조.** 담당자가 나이고 미완료인 카드를 뽑아, 슬랙 스레드 첫 메시지의 제목·키워드와 `할일`을 대조한다. 확실한 것 하나만 후보로 낸다. 애매하면 후보를 내지 않는다.
    ```sql
    SELECT url, "할일", "상태", "작업 ID", "메모"
-   FROM "collection://d7229a7c-7fd6-4547-b321-b5370660d0f1"
-   WHERE "담당자" LIKE '%341d872b-594c-81a0-b4c2-0002f0e8c323%' AND "상태" NOT IN ('완료', '보관함')
+   FROM "<팀 작업리스트 data source>"
+   WHERE "담당자" LIKE '%<담당자 "나" UUID>%' AND "상태" NOT IN ('완료', '보관함')
    ```
 3. **그래도 없으면 사람에게 묻는다.** `AskUserQuestion`으로 "팀 카드를 만들까요?" — 만들면 `할일`(스레드 제목 기반 제안)·`담당자`=나·`상태`=진행 예정·`관련 스레드/문서`를 채운다. **사용자가 고르기 전에는 만들지 않는다.** 팀 카드는 팀 전체에 보이는 경계다.
 
@@ -58,39 +48,9 @@ argument-hint: '<슬랙 스레드 URL>'
 
 ## ② 개인 작업 페이지
 
-1. **중복 확인.** 이 DB에는 `스레드 URL` 속성이 없다. **슬랙 URL은 `이름`(title)의 하이퍼링크로 들어간다** — 이게 이 DB의 실제 운영 방식이다. `API-query-data-source`로 최근 페이지를 훑어 `이름` rich_text의 `text.link.url`에서 `p<메시지ID>`를 뽑아 대조한다. 있으면 그 페이지를 재사용하고 ③으로 간다.
-2. **생성** (`API-post-page`, parent = data source `8412989c-11e3-4685-8af9-35299fc6c097`):
-
-   | 속성 | 값 |
-   |---|---|
-   | `이름` | 팀 카드 `할일` 그대로. 팀 카드가 없으면 스레드 제목. **전체에 슬랙 URL을 link로 건다** |
-   | `프로젝트` | §프로젝트 판정 참조 |
-   | `상태` | `진행 중` |
-   | `작업 시작 날짜` | 오늘 |
-   | `메모 / 일정` | `팀 카드 #<작업 ID> <팀 카드 URL>` |
-
-### 프로젝트 판정
-
-작업 대상 레포의 경로로 `프로젝트`(select)를 정한다. 경로를 모르면 비워 둔다 — 틀린 값을 넣는 것보다 낫다.
-
-| 레포 경로 | `프로젝트` |
-|---|---|
-| `레포지토리/cashwalk/**` (CashwalkHome, CashwalkHomepageAstroWeb, CashwalkTownlifeCommunityMainWeb, CashwalkTownWalkWeb 등 전부) | `넛지헬스케어` |
-| `레포지토리/guesung/web-memo` | `웹 메모` |
-| `레포지토리/guesung/**` 그 외 | 이름이 일치하는 옵션이 있으면 그것, 없으면 **비워 둔다** |
-
-선택 가능한 옵션은 `웹 메모` · `우아한테크코스` · `우아한테크코스 프리코스` · `봄봄` · `넛지헬스케어` 뿐이다. **없는 옵션을 새로 만들지 않는다.**
-
-3. **본문 골격** (`API-patch-block-children`). 제목은 이 여섯 개를 이 이름 그대로 쓴다 — implement-loop가 제목으로 섹션을 찾는다.
-
-   ```
-   ## 설계서
-   ## TDL
-   ## QA 체크리스트
-   ## 논의 필요
-   ## 해결한 문제
-   ## 루프 로그
-   ```
+1. **중복 확인.** 슬랙 URL은 `이름`(title)의 하이퍼링크로 들어간다 — 전용 속성이 없다([왜 그런지](../../notion-databases.md#개인-업무-로그)). `API-query-data-source`로 최근 페이지를 훑어 `이름` rich_text의 `text.link.url`에서 `p<메시지ID>`를 뽑아 대조한다. 있으면 그 페이지를 재사용하고 ③으로 간다.
+2. **생성** (`API-post-page`, parent = 개인 업무 로그 data source). 채울 속성은 `이름`·`프로젝트`·`상태`·`작업 시작 날짜`·`메모 / 일정` 다섯이다. 각 칸의 값과 `프로젝트` select 판정은 [notion-databases.md](../../notion-databases.md#개인-업무-로그)를 그대로 따른다.
+3. **본문 골격** (`API-patch-block-children`). [notion-databases.md의 본문 섹션 골격](../../notion-databases.md#본문-섹션-골격) 여섯 제목을 그 이름 그대로 만든다 — design·implement-loop가 제목으로 섹션을 찾는다.
 
 ## ③ 설계서 씨앗
 

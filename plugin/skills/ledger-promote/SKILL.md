@@ -23,7 +23,7 @@ OS.md 3절의 되먹임 화살표가 이것이다. 사람이 지적한 것(노�
 
 | | 값 |
 |---|---|
-| 노션 코드 리뷰 문서화 DB | `collection://3c1a054b-7d82-801a-a2be-000bf6c7cdf3` (`claude.ai Notion` MCP) |
+| 노션 코드 리뷰 문서화 DB | data source URI·속성은 [notion-databases.md](../../notion-databases.md#코드-리뷰-문서화-db). `claude.ai Notion` MCP로만 읽힌다 |
 | 원장 | `${CLAUDE_PLUGIN_ROOT}/ledger/ledger.yaml` |
 | fixture | `${CLAUDE_PLUGIN_ROOT}/ledger/fixtures/violations.diff` |
 | 스크립트 | `${CLAUDE_PLUGIN_ROOT}/skills/ledger-promote/scripts/ledger_promote.py` |
@@ -44,7 +44,7 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/ledger-promote/scripts/ledger_promote.py" 
 
 ```sql
 SELECT url, "이름", "내용", "분류", "상태", "중요도", "적용 범위", "PR"
-FROM "collection://3c1a054b-7d82-801a-a2be-000bf6c7cdf3"
+FROM "<코드 리뷰 문서화 DB data source>"
 ```
 
 ### ② 원장과 대조
