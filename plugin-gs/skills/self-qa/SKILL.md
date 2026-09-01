@@ -1,6 +1,6 @@
 ---
 name: self-qa
-description: 설계서에서 QA 명세(항목별 관측 문장·전제·판정 기준·자동/수동)를 뽑아 노션 "QA 항목" DB에 행으로 쌓고, 자동 항목은 /guesung:ui-verify 로 브라우저에서 판정하며, 자동 불가 항목은 재현 방법을 남겨 수동 QA로 넘긴다. "셀프 QA", "QA 체크리스트 만들어", "QA 명세 뽑아줘", "QA 돌려", "self qa" 같은 표현이 개인 프로젝트 맥락에서 나오면 이 스킬을 사용한다(회사 작업은 /nudge:self-qa). /gs:implement-loop 의 §0-5(--checklist-only)와 ②(--run)에서 호출된다.
+description: 설계서에서 QA 명세(항목별 관측 문장·전제·판정 기준·자동/수동)를 뽑아 노션 "QA 항목" DB에 행으로 쌓고, 자동 항목은 /ui-verify 로 브라우저에서 판정하며, 자동 불가 항목은 재현 방법을 남겨 수동 QA로 넘긴다. "셀프 QA", "QA 체크리스트 만들어", "QA 명세 뽑아줘", "QA 돌려", "self qa" 같은 표현이 개인 프로젝트 맥락에서 나오면 이 스킬을 사용한다(회사 작업은 /nudge:self-qa). /gs:implement-loop 의 §0-5(--checklist-only)와 ②(--run)에서 호출된다.
 argument-hint: '<개인 업무 로그 페이지 URL | 설계서 파일 경로> [--checklist-only | --run]'
 ---
 
@@ -50,7 +50,7 @@ argument-hint: '<개인 업무 로그 페이지 URL | 설계서 파일 경로> [
 
 ## ② 자동 실행
 
-`유형`=자동 항목을 **한 번에 묶어** `/guesung:ui-verify`에 넘긴다. 항목마다 `ID`·`항목`·`전제`·`판정 기준`을 스펙으로 준다. ui-verify는 항목별 PASS/FAIL과 증거(스크린샷 경로·DOM 상태·콘솔)를 돌려준다.
+`유형`=자동 항목을 **한 번에 묶어** `/ui-verify`에 넘긴다. 항목마다 `ID`·`항목`·`전제`·`판정 기준`을 스펙으로 준다. ui-verify는 항목별 PASS/FAIL과 증거(스크린샷 경로·DOM 상태·콘솔)를 돌려준다.
 
 - ui-verify가 항목을 "관측 불가"로 돌려주면 그 항목은 **`유형`을 수동으로 바꾸고** ③으로 보낸다. 자동 판정에 실패한 항목을 PASS로 두지 않는다.
 - dev 서버가 안 뜨거나 라우트를 못 찾으면 멈춘다. 그건 QA 실패가 아니라 실행 환경 문제라 implement-loop 정지 조건 D에 준한다.
