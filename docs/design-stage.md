@@ -144,7 +144,7 @@ work-card의 4항목에서 둘이 늘어난다. 늘어난 쪽이 레포를 봐�
 | `OS.md` | 6절 "설계서의 형식과 저장 위치" 체크. 4절에 설계 단계 항 추가 |
 | `docs/orchestrator-plan.md` | 1절 파일 구조에 `design/` 추가 |
 
-implement-loop은 이번에 **별개의 변경 하나를 더 받는다** — 대상 레포가 cashwalk 밖이면 implement-loop의 ②~⑤ 퀄리티 판정 구간을 통째로 건너뛰는 분기. 주제가 다르므로 [docs/orchestrator-plan.md](./orchestrator-plan.md)의 "프로젝트별 루프 범위" 절에 따로 적었다. 같은 파일을 고치므로 구현 시점에 함께 반영한다.
+implement-loop은 이번에 **별개의 변경 하나를 더 받는다** — 대상 레포가 cashwalk 밖이면 implement-loop의 ②~⑤ 퀄리티 판정 구간을 통째로 건너뛰는 분기. 주제가 다르므로 [docs/orchestrator-plan.md](./orchestrator-plan.md)의 "프로젝트별 루프 범위" 절에 따로 적었다. 같은 파일을 고치므로 구현 시점에 함께 반영한다. (이 분기는 2026-08-31에 **시작 거부(하드 블록)** 로 개정됐다 — 같은 절 참조)
 
 work-card의 마지막 질문이 바뀌는 것이 눈에 잘 안 띄는 변경이다. 지금은 `논의 필요`가 0건이면 곧장 implement-loop을 부르는데, 그 자리에 `/os:design`이 들어가야 한다. 이걸 놓치면 설계 단계를 만들어놓고 **아무도 부르지 않는다.**
 
