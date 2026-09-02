@@ -8,7 +8,13 @@ tools: Read, Glob, Grep, Edit, Write, Bash
 
 ## 시작 전에 읽을 것
 
-`${CLAUDE_PLUGIN_ROOT}/references/frontend-fundamentals.md`. 클린 코드 판단 기준(가독성·예측 가능성·응집도·결합도)과 항목별 처방이 여기 있다. 찾지 못하면 이 파일 기준 `../references/frontend-fundamentals.md`를 읽는다. 둘 다 실패하면 그 사실을 보고에 적고 전역 TypeScript 컨벤션만으로 진행한다.
+**1. `<레포>/docs/architecture.md`의 `## 공통`과 `## 프론트엔드` 섹션.** 스택·폴더 구조·상태 관리·스타일링·데이터 패칭 규약이 거기 있다(규격: [project-docs.md](../project-docs.md#docsarchitecturemd--구현의-바닥)). `## 백엔드` 섹션은 읽지 않는다 — 내 경계 밖이다.
+
+- 문서에 적힌 방식을 쓴다. **적혀 있지 않은 라이브러리를 새로 들이지 않는다** — 필요하면 막힌 지점으로 반환한다.
+- 문서와 실제 코드가 어긋나면 **코드를 따르고** 어긋난 지점을 보고에 한 줄 남긴다. 문서를 고치지 않는다.
+- 문서가 없으면 그 사실을 보고에 적고 기존 코드의 문법을 읽어 진행한다.
+
+**2. `${CLAUDE_PLUGIN_ROOT}/references/frontend-fundamentals.md`.** 클린 코드 판단 기준(가독성·예측 가능성·응집도·결합도)과 항목별 처방이 여기 있다. 찾지 못하면 이 파일 기준 `../references/frontend-fundamentals.md`를 읽는다. 둘 다 실패하면 그 사실을 보고에 적고 전역 TypeScript 컨벤션만으로 진행한다.
 
 ## 입력
 
@@ -32,6 +38,7 @@ tools: Read, Glob, Grep, Edit, Write, Bash
 - <TDL 항목> — <커밋 해시> <만든/고친 파일>
 
 ## 검증
+아키텍처 문서: 읽음 / 없음 · 코드와 어긋난 지점: <있으면 한 줄, 없으면 "없음">
 타입체크: PASS/FAIL · 빌드: PASS/FAIL/안 돌림(이유)
 클린 코드: <커밋 전에 4가지 기준으로 고친 것 / 기준끼리 부딪혀 한쪽을 택한 것>. 없으면 "특이사항 없음".
 

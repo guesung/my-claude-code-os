@@ -19,6 +19,17 @@
 | -------------------------------------- | ----------------- | -------------------------------------------------------- |
 | `references/frontend-fundamentals.md`  | `gs:frontend-dev` | 클린 코드 4가지 기준(가독성·예측 가능성·응집도·결합도)과 항목별 처방 |
 
+## 대상 레포 안의 문서
+
+플러그인이 아니라 **작업 대상 레포**에 사는 문서다. 골격·인터뷰 질문은 [project-docs.md](./project-docs.md)가 SSOT다.
+
+| 문서 | 읽는 에이전트 | 없으면 채우는 곳 |
+| --- | --- | --- |
+| `<레포>/docs/project-identity.md` | `gs:planner` | `/gs:idea` §0-4 (인터뷰 → 사람 승인) |
+| `<레포>/docs/architecture.md` | `gs:frontend-dev` · `gs:backend-dev` | `/gs:implement-loop` §0-7 (레포에서 읽고 → 사람 승인) |
+
+에이전트는 **읽기만** 한다. 문서를 쓰는 건 사람 승인을 거치는 스킬 몫이다.
+
 ## MCP 의존
 
 | MCP           | 쓰이는 곳                                                                        | 용도                                                      |
